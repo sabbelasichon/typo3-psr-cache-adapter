@@ -1,16 +1,22 @@
 <?php
+
 declare(strict_types=1);
 
+/*
+ * This file is part of the "typo3_psr_cache_adapter" Extension for TYPO3 CMS.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ */
 
 namespace Ssch\Cache;
 
-
-use InvalidArgumentException;
-use Psr\Cache\CacheItemInterface;
 use DateInterval;
 use DateTime;
 use DateTimeInterface;
-use TypeError;
+use InvalidArgumentException;
+use Psr\Cache\CacheItemInterface;
+
 final class CacheItem implements CacheItemInterface
 {
     private string $key;
@@ -63,7 +69,10 @@ final class CacheItem implements CacheItemInterface
         } elseif ($expiration instanceof DateTimeInterface) {
             $this->expiry = (float) $expiration->format('U.u');
         } else {
-            throw new InvalidArgumentException(sprintf('Expiration date must be null or a DateTimeInterface, "%s" given.', get_debug_type($expiration)));
+            throw new InvalidArgumentException(sprintf(
+                'Expiration date must be null or a DateTimeInterface, "%s" given.',
+                get_debug_type($expiration)
+            ));
         }
 
         return $this;
@@ -78,13 +87,14 @@ final class CacheItem implements CacheItemInterface
         } elseif (is_int($time)) {
             $this->expiry = $time + microtime(true);
         } else {
-            throw new InvalidArgumentException(sprintf('Expiration date must be an integer, a DateInterval or null, "%s" given.', get_debug_type($time)));
+            throw new InvalidArgumentException(sprintf(
+                'Expiration date must be an integer, a DateInterval or null, "%s" given.',
+                get_debug_type($time)
+            ));
         }
 
         return $this;
     }
-
-
 
     /**
      * @internal

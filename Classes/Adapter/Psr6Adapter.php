@@ -1,9 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
+/*
+ * This file is part of the "typo3_psr_cache_adapter" Extension for TYPO3 CMS.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ */
 
 namespace Ssch\Cache\Adapter;
-
 
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -60,7 +66,7 @@ final class Psr6Adapter implements CacheItemPoolInterface
     public function deleteItems(array $keys): bool
     {
         foreach ($keys as $key) {
-            if (! $this->deleteItem($this->hash($key))) {
+            if (! $this->deleteItem($key)) {
                 return false;
             }
         }

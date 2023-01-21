@@ -57,6 +57,23 @@
         "post-autoload-dump": [
             "mkdir -p .Build/Web/typo3conf/ext/",
             "[ -L .Build/Web/typo3conf/ext/typo3_psr_cache_adapter ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/typo3_psr_cache_adapter"
+        ],
+        "analyze": "phpstan analyse --ansi --memory-limit=-1",
+        "test-php-lint": [
+            ".Build/bin/parallel-lint ./Classes/",
+            ".Build/bin/parallel-lint ./Configuration/TCA/",
+            ".Build/bin/parallel-lint ./Tests/"
+        ],
+        "lint-php": "parallel-lint Tests Classes Configuration",
+        "check-style": "ecs check --ansi",
+        "fix-style": [
+            "ecs check --fix --ansi"
+        ],
+        "test-unit": [
+            ".Build/bin/phpunit --configuration Tests/Build/UnitTests.xml"
+        ],
+        "test-functional": [
+            ".Build/bin/phpunit --configuration Tests/Build/FunctionalTests.xml"
         ]
     },
     "extra": {

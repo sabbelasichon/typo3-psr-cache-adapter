@@ -1,0 +1,16 @@
+{
+  "name": "ssch/typo3-psr-cache-adapter-test",
+  "type": "typo3-cms-extension",
+  "description": "Test extensions for typo3_psr_cache_adapter",
+  "license": "GPL-2.0+",
+  "require": {
+    "ssch/typo3-psr-cache-adapter": "*"
+  },
+  "autoload": {
+    "Ssch\\T3MessengerTest\\": "Classes"
+  },
+  "replace": {
+    "typo3_psr_cache_adapter_test": "self.version",
+    "typo3-ter/typo3-psr-cache-adapter-test": "self.version"
+  }
+}
