@@ -22,7 +22,6 @@
         "phpstan/phpstan": "^1.8",
         "saschaegerer/phpstan-typo3": "^1.8",
         "phpstan/extension-installer": "^1.2",
-        "cache/integration-tests": "dev-master",
         "phpstan/phpstan-phpunit": "^1.2",
         "phpstan/phpstan-strict-rules": "^1.4"
     },
