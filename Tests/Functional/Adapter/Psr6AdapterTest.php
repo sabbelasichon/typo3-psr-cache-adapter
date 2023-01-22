@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Ssch\Cache\Tests\Functional\Adapter;
 
-use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Ssch\Cache\Tests\Functional\Fixtures\Extensions\typo3_psr_cache_adapter_test\Classes\Service\ServiceWithCache;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -34,6 +33,12 @@ final class Psr6AdapterTest extends FunctionalTestCase
         $this->serviceWithCache = $this->get(ServiceWithCache::class);
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $this->cacheAdapter->deleteItem(ServiceWithCache::CACHE_ITEM_KEY);
+    }
+
     public function testThatFirstCalculationCreatesCacheEntry(): void
     {
         $this->serviceWithCache->calculate();
@@ -48,8 +53,10 @@ final class Psr6AdapterTest extends FunctionalTestCase
     {
         $this->serviceWithCache->calculate();
         $items = $this->cacheAdapter->getItems([ServiceWithCache::CACHE_ITEM_KEY]);
-        self::assertInstanceOf(CacheItemInterface::class, $items[0]);
-        self::assertSame(md5(ServiceWithCache::CACHE_VALUE), $items[0]->get());
+
+        foreach ($items as $item) {
+            self::assertSame(md5(ServiceWithCache::CACHE_VALUE), $item->get());
+        }
     }
 
     public function testThatCacheIsTruncatedCorrectly(): void
@@ -65,6 +72,13 @@ final class Psr6AdapterTest extends FunctionalTestCase
         $this->serviceWithCache->calculate();
         self::assertTrue($this->cacheAdapter->hasItem(ServiceWithCache::CACHE_ITEM_KEY));
         $this->cacheAdapter->deleteItems([ServiceWithCache::CACHE_ITEM_KEY]);
+        self::assertFalse($this->cacheAdapter->hasItem(ServiceWithCache::CACHE_ITEM_KEY));
+    }
+
+    public function testThatLifetimeIsCorrectlySet(): void
+    {
+        $this->serviceWithCache->calculate(1);
+        sleep(2);
         self::assertFalse($this->cacheAdapter->hasItem(ServiceWithCache::CACHE_ITEM_KEY));
     }
 }

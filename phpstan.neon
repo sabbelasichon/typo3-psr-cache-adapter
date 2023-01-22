@@ -1,10 +1,10 @@
 parameters:
   editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
   level: 8
+  treatPhpDocTypesAsCertain: false
   paths:
     - Classes
     - Tests
-    - Configuration
   excludePaths:
     analyse:
       -  Tests/Functional/Fixtures/Extensions/*

@@ -16,7 +16,7 @@ if (! isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']
 )) {
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['typo3_psr_cache_adapter_test'] = [
         'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
-        'backend' => \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class,
+        'backend' => \TYPO3\CMS\Core\Cache\Backend\FileBackend::class,
         'options' => [
             'defaultLifetime' => 0,
         ],

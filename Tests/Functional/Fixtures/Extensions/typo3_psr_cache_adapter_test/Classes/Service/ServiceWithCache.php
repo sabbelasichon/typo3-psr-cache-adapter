@@ -26,10 +26,11 @@ final class ServiceWithCache
         $this->cacheItemPool = $cacheItemPool;
     }
 
-    public function calculate()
+    public function calculate(int $lifetime = null)
     {
         $cacheItem = $this->cacheItemPool->getItem(self::CACHE_ITEM_KEY);
         if (! $cacheItem->isHit()) {
+            $cacheItem->expiresAfter($lifetime);
             $cacheItem->set(md5(self::CACHE_VALUE));
             $this->cacheItemPool->save($cacheItem);
         }

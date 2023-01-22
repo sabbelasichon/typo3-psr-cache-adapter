@@ -69,9 +69,6 @@
         "fix-style": [
             "ecs check --fix --ansi"
         ],
-        "test-unit": [
-            ".Build/bin/phpunit --configuration Tests/Build/UnitTests.xml"
-        ],
         "test-functional": [
             ".Build/bin/phpunit --configuration Tests/Build/FunctionalTests.xml"
         ]

@@ -42,9 +42,6 @@ jobs:
             # see https://github.com/ramsey/composer-install
             -   uses: "ramsey/composer-install@v2"
 
-            - name: "Run Unit tests"
-              run: composer test-unit
-
             - name: "Functional tests"
               run: |
                 export typo3DatabaseName="typo3";

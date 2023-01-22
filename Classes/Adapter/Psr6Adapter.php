@@ -36,6 +36,9 @@ final class Psr6Adapter implements CacheItemPoolInterface
         return new CacheItem($key, $data, true);
     }
 
+    /**
+     * @return iterable<CacheItemInterface>
+     */
     public function getItems(array $keys = []): iterable
     {
         $cacheItems = [];
@@ -77,7 +80,13 @@ final class Psr6Adapter implements CacheItemPoolInterface
     public function save(CacheItemInterface $item): bool
     {
         try {
-            $this->cache->set($this->hash($item->getKey()), $item->get());
+            $lifetime = null;
+
+            if (method_exists($item, 'getExpiry')) {
+                $lifetime = $item->getExpiry() ? (int) ($GLOBALS['EXEC_TIME'] - $item->getExpiry()) : null;
+            }
+
+            $this->cache->set($this->hash($item->getKey()), $item->get(), [], $lifetime);
 
             return true;
         } catch (\Throwable $e) {

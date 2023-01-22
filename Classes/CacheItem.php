@@ -11,9 +11,6 @@ declare(strict_types=1);
 
 namespace Ssch\Cache;
 
-use DateInterval;
-use DateTime;
-use DateTimeInterface;
 use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 
@@ -28,7 +25,7 @@ final class CacheItem implements CacheItemInterface
 
     private bool $isHit;
 
-    private ?float $expiry = null;
+    private ?int $expiry = null;
 
     /**
      * @param mixed $data
@@ -66,11 +63,11 @@ final class CacheItem implements CacheItemInterface
     {
         if ($expiration === null) {
             $this->expiry = null;
-        } elseif ($expiration instanceof DateTimeInterface) {
-            $this->expiry = (float) $expiration->format('U.u');
+        } elseif ($expiration instanceof \DateTimeInterface) {
+            $this->expiry = $expiration->getTimestamp();
         } else {
             throw new InvalidArgumentException(sprintf(
-                'Expiration date must be null or a DateTimeInterface, "%s" given.',
+                'Expiration date must be null or an integer (Unix timestamp), "%s" given.',
                 get_debug_type($expiration)
             ));
         }
@@ -82,13 +79,11 @@ final class CacheItem implements CacheItemInterface
     {
         if ($time === null) {
             $this->expiry = null;
-        } elseif ($time instanceof DateInterval) {
-            $this->expiry = microtime(true) + DateTime::createFromFormat('U', '0')->add($time)->format('U.u');
         } elseif (is_int($time)) {
-            $this->expiry = $time + microtime(true);
+            $this->expiry = (int) ($GLOBALS['EXEC_TIME'] + $time);
         } else {
             throw new InvalidArgumentException(sprintf(
-                'Expiration date must be an integer, a DateInterval or null, "%s" given.',
+                'Expiration date must be an integer, "%s" given.',
                 get_debug_type($time)
             ));
         }
@@ -99,7 +94,7 @@ final class CacheItem implements CacheItemInterface
     /**
      * @internal
      */
-    public function getExpiry(): ?float
+    public function getExpiry(): ?int
     {
         return $this->expiry;
     }
