@@ -5,7 +5,7 @@ Provide a PSR-6 and PSR-16 compatible cache adapter for the TYPO3 Caching Framew
 
 To ease the creation of a PSR-6 or PSR-16 compatible cache object the extension ships with two factories.
 One for PSR-6 and one for PSR-16.  
-In order create either a PSR-6 or a PSR-16 compatible cache object you can configure it via Symfony DI
+Create either a PSR-6 or a PSR-16 compatible cache object with leveraging Symfony DI configuration:
 
 ```php
 use Ssch\Cache\Adapter\Psr6Adapter;
