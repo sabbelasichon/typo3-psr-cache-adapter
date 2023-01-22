@@ -5,6 +5,8 @@ parameters:
   paths:
     - Classes
     - Tests
+    - Configuration
+  checkMissingIterableValueType: false
   excludePaths:
     analyse:
       -  Tests/Functional/Fixtures/Extensions/*
