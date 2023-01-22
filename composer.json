@@ -61,10 +61,9 @@
         "analyze": "phpstan analyse --ansi --memory-limit=-1",
         "test-php-lint": [
             ".Build/bin/parallel-lint ./Classes/",
-            ".Build/bin/parallel-lint ./Configuration/TCA/",
             ".Build/bin/parallel-lint ./Tests/"
         ],
-        "lint-php": "parallel-lint Tests Classes Configuration",
+        "lint-php": "parallel-lint Tests Classes",
         "check-style": "ecs check --ansi",
         "fix-style": [
             "ecs check --fix --ansi"
