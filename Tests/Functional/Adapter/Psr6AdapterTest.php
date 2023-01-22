@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Ssch\Cache\Tests\Functional\Adapter;
 
 use Psr\Cache\CacheItemPoolInterface;
-use Ssch\Cache\Tests\Functional\Fixtures\Extensions\typo3_psr_cache_adapter_test\Classes\Service\ServiceWithCache;
+use Ssch\Cache\Tests\Functional\Fixtures\Extensions\typo3_psr_cache_adapter_test\Classes\Service\ServiceWithPsr6Cache;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class Psr6AdapterTest extends FunctionalTestCase
@@ -24,61 +24,61 @@ final class Psr6AdapterTest extends FunctionalTestCase
 
     private CacheItemPoolInterface $cacheAdapter;
 
-    private ServiceWithCache $serviceWithCache;
+    private ServiceWithPsr6Cache $serviceWithPsr6Cache;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->cacheAdapter = $this->get('cache.psr6.typo3_psr_cache_adapter_test');
-        $this->serviceWithCache = $this->get(ServiceWithCache::class);
+        $this->serviceWithPsr6Cache = $this->get(ServiceWithPsr6Cache::class);
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
-        $this->cacheAdapter->deleteItem(ServiceWithCache::CACHE_ITEM_KEY);
+        $this->cacheAdapter->deleteItem(ServiceWithPsr6Cache::CACHE_ITEM_KEY);
     }
 
     public function testThatFirstCalculationCreatesCacheEntry(): void
     {
-        $this->serviceWithCache->calculate();
-        self::assertTrue($this->cacheAdapter->hasItem(ServiceWithCache::CACHE_ITEM_KEY));
+        $this->serviceWithPsr6Cache->calculate();
+        self::assertTrue($this->cacheAdapter->hasItem(ServiceWithPsr6Cache::CACHE_ITEM_KEY));
         self::assertSame(
-            md5(ServiceWithCache::CACHE_VALUE),
-            $this->cacheAdapter->getItem(ServiceWithCache::CACHE_ITEM_KEY)->get()
+            md5(ServiceWithPsr6Cache::CACHE_VALUE),
+            $this->cacheAdapter->getItem(ServiceWithPsr6Cache::CACHE_ITEM_KEY)->get()
         );
     }
 
     public function testThatGetItemsReturnsCorrectResults(): void
     {
-        $this->serviceWithCache->calculate();
-        $items = $this->cacheAdapter->getItems([ServiceWithCache::CACHE_ITEM_KEY]);
+        $this->serviceWithPsr6Cache->calculate();
+        $items = $this->cacheAdapter->getItems([ServiceWithPsr6Cache::CACHE_ITEM_KEY]);
 
         foreach ($items as $item) {
-            self::assertSame(md5(ServiceWithCache::CACHE_VALUE), $item->get());
+            self::assertSame(md5(ServiceWithPsr6Cache::CACHE_VALUE), $item->get());
         }
     }
 
     public function testThatCacheIsTruncatedCorrectly(): void
     {
-        $this->serviceWithCache->calculate();
-        self::assertTrue($this->cacheAdapter->hasItem(ServiceWithCache::CACHE_ITEM_KEY));
+        $this->serviceWithPsr6Cache->calculate();
+        self::assertTrue($this->cacheAdapter->hasItem(ServiceWithPsr6Cache::CACHE_ITEM_KEY));
         $this->cacheAdapter->clear();
-        self::assertFalse($this->cacheAdapter->hasItem(ServiceWithCache::CACHE_ITEM_KEY));
+        self::assertFalse($this->cacheAdapter->hasItem(ServiceWithPsr6Cache::CACHE_ITEM_KEY));
     }
 
     public function testThatDeletingItemsIsSuccessful(): void
     {
-        $this->serviceWithCache->calculate();
-        self::assertTrue($this->cacheAdapter->hasItem(ServiceWithCache::CACHE_ITEM_KEY));
-        $this->cacheAdapter->deleteItems([ServiceWithCache::CACHE_ITEM_KEY]);
-        self::assertFalse($this->cacheAdapter->hasItem(ServiceWithCache::CACHE_ITEM_KEY));
+        $this->serviceWithPsr6Cache->calculate();
+        self::assertTrue($this->cacheAdapter->hasItem(ServiceWithPsr6Cache::CACHE_ITEM_KEY));
+        $this->cacheAdapter->deleteItems([ServiceWithPsr6Cache::CACHE_ITEM_KEY]);
+        self::assertFalse($this->cacheAdapter->hasItem(ServiceWithPsr6Cache::CACHE_ITEM_KEY));
     }
 
     public function testThatLifetimeIsCorrectlySet(): void
     {
-        $this->serviceWithCache->calculate(1);
+        $this->serviceWithPsr6Cache->calculate(1);
         sleep(2);
-        self::assertFalse($this->cacheAdapter->hasItem(ServiceWithCache::CACHE_ITEM_KEY));
+        self::assertFalse($this->cacheAdapter->hasItem(ServiceWithPsr6Cache::CACHE_ITEM_KEY));
     }
 }

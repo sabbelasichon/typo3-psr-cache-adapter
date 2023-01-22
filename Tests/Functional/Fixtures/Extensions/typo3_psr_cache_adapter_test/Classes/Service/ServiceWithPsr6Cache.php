@@ -13,7 +13,7 @@ namespace Ssch\Cache\Tests\Functional\Fixtures\Extensions\typo3_psr_cache_adapte
 
 use Psr\Cache\CacheItemPoolInterface;
 
-final class ServiceWithCache
+final class ServiceWithPsr6Cache
 {
     public const CACHE_ITEM_KEY = 'foo-bar-baz';
 
@@ -26,7 +26,7 @@ final class ServiceWithCache
         $this->cacheItemPool = $cacheItemPool;
     }
 
-    public function calculate(int $lifetime = null)
+    public function calculate(int $lifetime = null): void
     {
         $cacheItem = $this->cacheItemPool->getItem(self::CACHE_ITEM_KEY);
         if (! $cacheItem->isHit()) {
