@@ -8,7 +8,7 @@ One for PSR-6 and one for PSR-16.
 Create either a PSR-6 or a PSR-16 compatible cache object with leveraging Symfony DI configuration:
 
 ```php
-use Ssch\Cache\Adapter\Psr6Adapter;
+use Psr\Cache\CacheItemPoolInterface;
 use Ssch\Cache\Factory\Psr6Factory;
 use MyNamespace\MyExtensionKey\Service\MyService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -21,7 +21,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->private()
         ->autoconfigure();
 
-    $services->set('cache.psr6.typo3_psr_cache_adapter_test', Psr6Adapter::class)
+    $services->set('cache.psr6.typo3_psr_cache_adapter_test', CacheItemPoolInterface::class)
         ->factory([service(Psr6Factory::class), 'create'])
         ->args(['typo3_psr_cache_adapter_test']);
     $services->set(MyService::class)
