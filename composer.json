@@ -13,7 +13,7 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "typo3/cms-core": "^10.4 || ^11.4 || ^12.1",
-        "psr/cache": "^1.0",
+        "psr/cache": "^1.0 || ^2.0",
         "psr/simple-cache": "^1.0"
     },
     "require-dev": {
