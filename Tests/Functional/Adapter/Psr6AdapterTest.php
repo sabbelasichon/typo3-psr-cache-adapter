@@ -17,17 +17,16 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class Psr6AdapterTest extends FunctionalTestCase
 {
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/typo3_psr_cache_adapter',
-        'typo3conf/ext/typo3_psr_cache_adapter/Tests/Functional/Fixtures/Extensions/typo3_psr_cache_adapter_test',
-    ];
-
     private CacheItemPoolInterface $cacheAdapter;
 
     private ServiceWithPsr6Cache $serviceWithPsr6Cache;
 
     protected function setUp(): void
     {
+        $this->testExtensionsToLoad = [
+            'typo3conf/ext/typo3_psr_cache_adapter',
+            'typo3conf/ext/typo3_psr_cache_adapter/Tests/Functional/Fixtures/Extensions/typo3_psr_cache_adapter_test',
+        ];
         parent::setUp();
         $this->cacheAdapter = $this->get('cache.psr6.typo3_psr_cache_adapter_test');
         $this->serviceWithPsr6Cache = $this->get(ServiceWithPsr6Cache::class);

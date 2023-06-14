@@ -17,17 +17,16 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class Psr16CacheAdapterTest extends FunctionalTestCase
 {
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/typo3_psr_cache_adapter',
-        'typo3conf/ext/typo3_psr_cache_adapter/Tests/Functional/Fixtures/Extensions/typo3_psr_cache_adapter_test',
-    ];
-
     private CacheInterface $cacheAdapter;
 
     private ServiceWithPsr16Cache $serviceWithPsr16Cache;
 
     protected function setUp(): void
     {
+        $this->testExtensionsToLoad = [
+            'typo3conf/ext/typo3_psr_cache_adapter',
+            'typo3conf/ext/typo3_psr_cache_adapter/Tests/Functional/Fixtures/Extensions/typo3_psr_cache_adapter_test',
+        ];
         parent::setUp();
         $this->cacheAdapter = $this->get('cache.psr16.typo3_psr_cache_adapter_test');
         $this->serviceWithPsr16Cache = $this->get(ServiceWithPsr16Cache::class);
@@ -74,11 +73,4 @@ final class Psr16CacheAdapterTest extends FunctionalTestCase
         $this->cacheAdapter->deleteMultiple([ServiceWithPsr16Cache::CACHE_ITEM_KEY]);
         self::assertFalse($this->cacheAdapter->has(ServiceWithPsr16Cache::CACHE_ITEM_KEY));
     }
-
-//    public function testThatLifetimeIsCorrectlySet(): void
-//    {
-//        $this->serviceWithPsr16Cache->calculate(1);
-//        sleep(2);
-//        self::assertFalse($this->cacheAdapter->has(ServiceWithPsr16Cache::CACHE_ITEM_KEY));
-//    }
 }
