@@ -55,7 +55,7 @@ final class Psr16CacheAdapterTest extends FunctionalTestCase
      * @dataProvider expiresAfterTimeProvider
      * @param DateInterval|int|null $input
      */
-    public function testThatFirstCalculationCreatesCacheEntry(string $expected, mixed $input): void
+    public function testThatFirstCalculationCreatesCacheEntry(string $expected, $input): void
     {
         $this->cacheAdapter->clear();
         $this->serviceWithPsr16Cache->calculate($input);
@@ -70,7 +70,7 @@ final class Psr16CacheAdapterTest extends FunctionalTestCase
      * @dataProvider expiresAfterTimeProvider
      * @param DateInterval|int|null $input
      */
-    public function testThatGetItemsReturnsCorrectResults(string $expected, mixed $input): void
+    public function testThatGetItemsReturnsCorrectResults(string $expected, $input): void
     {
         $this->cacheAdapter->clear();
         $this->serviceWithPsr16Cache->calculate($input);
