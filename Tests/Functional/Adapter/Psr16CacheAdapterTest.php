@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Ssch\Cache\Tests\Functional\Adapter;
 
+use DateInterval;
 use Psr\SimpleCache\CacheInterface;
 use Ssch\Cache\Tests\Functional\Fixtures\Extensions\typo3_psr_cache_adapter_test\Classes\Service\ServiceWithPsr16Cache;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -38,9 +39,26 @@ final class Psr16CacheAdapterTest extends FunctionalTestCase
         $this->cacheAdapter->delete(ServiceWithPsr16Cache::CACHE_ITEM_KEY);
     }
 
-    public function testThatFirstCalculationCreatesCacheEntry(): void
+    /**
+     * @return array[]
+     */
+    public static function expiresAfterTimeProvider()
     {
-        $this->serviceWithPsr16Cache->calculate();
+        return [
+            'null' => ['', null],
+            'int' => ['', 1],
+            'DateInterval' => ['', new \DateInterval('PT1S')],
+        ];
+    }
+
+    /**
+     * @dataProvider expiresAfterTimeProvider
+     * @param DateInterval|int|null $input
+     */
+    public function testThatFirstCalculationCreatesCacheEntry(string $expected, mixed $input): void
+    {
+        $this->cacheAdapter->clear();
+        $this->serviceWithPsr16Cache->calculate($input);
         self::assertTrue($this->cacheAdapter->has(ServiceWithPsr16Cache::CACHE_ITEM_KEY));
         self::assertSame(
             md5(ServiceWithPsr16Cache::CACHE_VALUE),
@@ -48,9 +66,14 @@ final class Psr16CacheAdapterTest extends FunctionalTestCase
         );
     }
 
-    public function testThatGetItemsReturnsCorrectResults(): void
+    /**
+     * @dataProvider expiresAfterTimeProvider
+     * @param DateInterval|int|null $input
+     */
+    public function testThatGetItemsReturnsCorrectResults(string $expected, mixed $input): void
     {
-        $this->serviceWithPsr16Cache->calculate();
+        $this->cacheAdapter->clear();
+        $this->serviceWithPsr16Cache->calculate($input);
         $items = $this->cacheAdapter->getMultiple([ServiceWithPsr16Cache::CACHE_ITEM_KEY]);
 
         foreach ($items as $item) {
@@ -60,6 +83,7 @@ final class Psr16CacheAdapterTest extends FunctionalTestCase
 
     public function testThatCacheIsTruncatedCorrectly(): void
     {
+        $this->cacheAdapter->clear();
         $this->serviceWithPsr16Cache->calculate();
         self::assertTrue($this->cacheAdapter->has(ServiceWithPsr16Cache::CACHE_ITEM_KEY));
         $this->cacheAdapter->clear();
@@ -68,6 +92,7 @@ final class Psr16CacheAdapterTest extends FunctionalTestCase
 
     public function testThatDeletingItemsIsSuccessful(): void
     {
+        $this->cacheAdapter->clear();
         $this->serviceWithPsr16Cache->calculate();
         self::assertTrue($this->cacheAdapter->has(ServiceWithPsr16Cache::CACHE_ITEM_KEY));
         $this->cacheAdapter->deleteMultiple([ServiceWithPsr16Cache::CACHE_ITEM_KEY]);

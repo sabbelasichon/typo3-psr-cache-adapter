@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Ssch\Cache\Tests\Functional\Fixtures\Extensions\typo3_psr_cache_adapter_test\Classes\Service;
 
+use DateInterval;
 use Psr\SimpleCache\CacheInterface;
 
 final class ServiceWithPsr16Cache
@@ -26,7 +27,10 @@ final class ServiceWithPsr16Cache
         $this->cache = $cache;
     }
 
-    public function calculate(int $lifetime = null): void
+    /**
+     * @param DateInterval|int|null $lifetime
+     */
+    public function calculate($lifetime = null): void
     {
         if (! $this->cache->has(self::CACHE_ITEM_KEY)) {
             $this->cache->set(self::CACHE_ITEM_KEY, md5(self::CACHE_VALUE), $lifetime);

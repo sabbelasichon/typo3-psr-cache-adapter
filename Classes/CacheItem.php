@@ -81,9 +81,12 @@ final class CacheItem implements CacheItemInterface
             $this->expiry = null;
         } elseif (is_int($time)) {
             $this->expiry = (int) ($GLOBALS['EXEC_TIME'] + $time);
+        } elseif ($time instanceof \DateInterval) {
+            $this->expiry = (new \DateTime('@0'))->add($time)
+                ->getTimestamp() + $GLOBALS['EXEC_TIME'];
         } else {
             throw new InvalidArgumentException(sprintf(
-                'Expiration date must be an integer, "%s" given.',
+                'Expiration date must be null, integer or DateInterval, "%s" given.',
                 get_debug_type($time)
             ));
         }
