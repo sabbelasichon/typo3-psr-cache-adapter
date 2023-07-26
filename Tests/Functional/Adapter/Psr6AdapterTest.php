@@ -42,7 +42,7 @@ final class Psr6AdapterTest extends FunctionalTestCase
     /**
      * @return array[]
      */
-    public static function expiresAfterTimeProvider()
+    public static function lifetimeProvider()
     {
         return [
             'null' => ['', null],
@@ -52,7 +52,7 @@ final class Psr6AdapterTest extends FunctionalTestCase
     }
 
     /**
-     * @dataProvider expiresAfterTimeProvider
+     * @dataProvider lifetimeProvider
      * @param DateInterval|int|null $input
      */
     public function testThatFirstCalculationCreatesCacheEntry(string $expected, $input): void
@@ -67,7 +67,7 @@ final class Psr6AdapterTest extends FunctionalTestCase
     }
 
     /**
-     * @dataProvider expiresAfterTimeProvider
+     * @dataProvider lifetimeProvider
      * @param DateInterval|int|null $input
      */
     public function testThatGetItemsReturnsCorrectResults(string $expected, $input): void
@@ -81,18 +81,37 @@ final class Psr6AdapterTest extends FunctionalTestCase
         }
     }
 
-    //    /**
-    //     * @dataProvider expiresAfterTimeProvider
-    //     * @param string $expected
-    //     * @param DateInterval|int|null $input
-    //     */
-    //    public function testThatLifetimeIsCorrectlySet(string $expected, $input): void
-    //    {
-    //        $this->cacheAdapter->clear();
-    //        $this->serviceWithPsr6Cache->calculate($input);
-    //        sleep(2);
-    //        self::assertFalse($this->cacheAdapter->hasItem(ServiceWithPsr6Cache::CACHE_ITEM_KEY));
-    //    }
+    /**
+     * @return array[]
+     */
+    public static function expiresAfterTimeProvider()
+    {
+        return [
+            'int' => ['', 1],
+            'DateInterval' => ['', new \DateInterval('PT1S')],
+        ];
+    }
+
+    /**
+     * @dataProvider expiresAfterTimeProvider
+     * @param DateInterval|int|null $input
+     */
+    public function testThatLifetimeIsCorrectlySet(string $expected, $input): void
+    {
+        $this->cacheAdapter->clear();
+        self::assertFalse($this->cacheAdapter->hasItem(ServiceWithPsr6Cache::CACHE_ITEM_KEY));
+        $this->serviceWithPsr6Cache->calculate($input);
+        self::assertTrue($this->cacheAdapter->hasItem(ServiceWithPsr6Cache::CACHE_ITEM_KEY));
+        /*
+        Expiry, when given as integer, is set as timestamp: $GLOBALS['EXEC_TIME'] + lifetime
+        FileBackend calculates the expiry based on $GLOBALS['EXEC_TIME']:
+        It is expired when: $expiryTime !== 0 && $expiryTime < $GLOBALS['EXEC_TIME'];
+        Because we set and query the cache item in the same request $GLOBALS['EXEC_TIME'] is the same
+        when setting the expiry time and when checking for its expiry in FileBackend.
+        As a workaround we manipulate $GLOBALS['EXEC_TIME'] */
+        $GLOBALS['EXEC_TIME'] = $GLOBALS['EXEC_TIME'] + 2;
+        self::assertFalse($this->cacheAdapter->hasItem(ServiceWithPsr6Cache::CACHE_ITEM_KEY));
+    }
 
     public function testThatCacheIsTruncatedCorrectly(): void
     {
