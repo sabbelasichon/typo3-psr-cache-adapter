@@ -83,7 +83,7 @@ final class Psr6Adapter implements CacheItemPoolInterface
             $lifetime = null;
 
             if (method_exists($item, 'getExpiry')) {
-                $lifetime = $item->getExpiry() ? (int) ($GLOBALS['EXEC_TIME'] - $item->getExpiry()) : null;
+                $lifetime = $item->getExpiry() ? (int) ($item->getExpiry() - $GLOBALS['EXEC_TIME']) : null;
             }
 
             $this->cache->set($this->hash($item->getKey()), $item->get(), [], $lifetime);

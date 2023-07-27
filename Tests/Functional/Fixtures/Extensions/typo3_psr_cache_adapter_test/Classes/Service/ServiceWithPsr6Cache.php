@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Ssch\Cache\Tests\Functional\Fixtures\Extensions\typo3_psr_cache_adapter_test\Classes\Service;
 
+use DateInterval;
 use Psr\Cache\CacheItemPoolInterface;
 
 final class ServiceWithPsr6Cache
@@ -26,7 +27,10 @@ final class ServiceWithPsr6Cache
         $this->cacheItemPool = $cacheItemPool;
     }
 
-    public function calculate(int $lifetime = null): void
+    /**
+     * @param DateInterval|int|null $lifetime
+     */
+    public function calculate($lifetime = null): void
     {
         $cacheItem = $this->cacheItemPool->getItem(self::CACHE_ITEM_KEY);
         if (! $cacheItem->isHit()) {
