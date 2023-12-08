@@ -76,7 +76,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-main": "1.0.x-dev"
         },
         "typo3/cms": {
             "extension-key": "typo3_psr_cache_adapter",
