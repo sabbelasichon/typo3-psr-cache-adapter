@@ -42,7 +42,7 @@ final class CacheItem implements CacheItemInterface
         return $this->key;
     }
 
-    public function get()
+    public function get(): mixed
     {
         return $this->value;
     }
@@ -52,14 +52,14 @@ final class CacheItem implements CacheItemInterface
         return $this->isHit;
     }
 
-    public function set($value): CacheItemInterface
+    public function set(mixed $value): static
     {
         $this->value = $value;
 
         return $this;
     }
 
-    public function expiresAt($expiration): CacheItemInterface
+    public function expiresAt(?\DateTimeInterface $expiration): static
     {
         if ($expiration === null) {
             $this->expiry = null;
@@ -75,7 +75,7 @@ final class CacheItem implements CacheItemInterface
         return $this;
     }
 
-    public function expiresAfter($time): CacheItemInterface
+    public function expiresAfter(\DateInterval|int|null $time): static
     {
         if ($time === null) {
             $this->expiry = null;
