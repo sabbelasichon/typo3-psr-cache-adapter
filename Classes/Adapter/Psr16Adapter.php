@@ -23,7 +23,7 @@ final class Psr16Adapter implements CacheInterface
         $this->cache = $cache;
     }
 
-    public function get($key, $default = null)
+    public function get($key, $default = null): mixed
     {
         $result = $this->cache->get($this->hash($key));
 
@@ -34,7 +34,7 @@ final class Psr16Adapter implements CacheInterface
         return $result;
     }
 
-    public function set($key, $value, $ttl = null)
+    public function set($key, $value, $ttl = null): bool
     {
         if ($ttl instanceof \DateInterval) {
             $lifetime = $this->calculateLifetimeFromDateInterval($ttl);
@@ -59,7 +59,7 @@ final class Psr16Adapter implements CacheInterface
         return true;
     }
 
-    public function getMultiple($keys, $default = null): array
+    public function getMultiple($keys, $default = null): iterable
     {
         $result = [];
         foreach ($keys as $key) {

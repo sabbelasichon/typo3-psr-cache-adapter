@@ -6,7 +6,10 @@ parameters:
     - Classes
     - Tests
     - Configuration
-  checkMissingIterableValueType: false
+  ignoreErrors:
+    -
+        identifier: missingType.iterableValue
   excludePaths:
     analyse:
       -  Tests/Functional/Fixtures/Extensions/*
+      -  Tests/Build/*
