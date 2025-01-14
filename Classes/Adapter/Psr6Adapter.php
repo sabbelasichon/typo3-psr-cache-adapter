@@ -36,9 +36,6 @@ final class Psr6Adapter implements CacheItemPoolInterface
         return new CacheItem($key, $data, true);
     }
 
-    /**
-     * @return iterable<CacheItemInterface>
-     */
     public function getItems(array $keys = []): iterable
     {
         $cacheItems = [];

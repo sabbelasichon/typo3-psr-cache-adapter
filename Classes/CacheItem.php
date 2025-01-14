@@ -27,10 +27,7 @@ final class CacheItem implements CacheItemInterface
 
     private ?int $expiry = null;
 
-    /**
-     * @param mixed $data
-     */
-    public function __construct(string $key, $data, bool $isHit)
+    public function __construct(string $key, mixed $data, bool $isHit)
     {
         $this->key = $key;
         $this->value = $data;
@@ -42,7 +39,7 @@ final class CacheItem implements CacheItemInterface
         return $this->key;
     }
 
-    public function get()
+    public function get(): mixed
     {
         return $this->value;
     }
@@ -52,14 +49,14 @@ final class CacheItem implements CacheItemInterface
         return $this->isHit;
     }
 
-    public function set($value): CacheItemInterface
+    public function set($value): static
     {
         $this->value = $value;
 
         return $this;
     }
 
-    public function expiresAt($expiration): CacheItemInterface
+    public function expiresAt($expiration): static
     {
         if ($expiration === null) {
             $this->expiry = null;
@@ -75,7 +72,7 @@ final class CacheItem implements CacheItemInterface
         return $this;
     }
 
-    public function expiresAfter($time): CacheItemInterface
+    public function expiresAfter($time): static
     {
         if ($time === null) {
             $this->expiry = null;
